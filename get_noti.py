@@ -38,13 +38,18 @@ def main():
         print(f"Found {len(activities)} recent activities:\n")
 
         for activity in activities:
-            if 'annotation' in str(activity).lower():
-                print(f"Type: {activity.get('type')}")
-                print(f"Title: {activity.get('title')}")
-                print(f"Created: {activity.get('created_at')}")
-                print(f"Link: {activity.get('html_url')}")
-                # print(activity)
-                print("-" * 60)
+            # print(activity)
+            print(f"Type: {activity.get('type')}")
+            print(f"Title: {activity.get('title')}")
+            print(f"Created: {activity.get('created_at')}")
+            print(f"Link: {activity.get('html_url')}")
+            print("-" * 60)
+            # if 'annotation' in str(activity).lower():
+            #     print(f"Type: {activity.get('type')}")
+            #     print(f"Title: {activity.get('title')}")
+            #     print(f"Created: {activity.get('created_at')}")
+            #     print(f"Link: {activity.get('html_url')}")
+            #     print("-" * 60)
     else:
         print(f"Could not fetch activity stream: {response.status_code}")
         print(response.text)
