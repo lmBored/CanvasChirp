@@ -1,6 +1,5 @@
 .venv
 .ruff_cache
-student_groups.json
 token
 __pycache__
 **/__pycache__
