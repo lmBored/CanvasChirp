@@ -1,0 +1,179 @@
+{
+  "seen": {
+    "013b51380dab8423e840907346b6412d6e5e45b33c54b6c6743ab14d5388256d": {
+      "assignment_id": 146387,
+      "author_id": 84115,
+      "created_at": "2026-01-22T14:45:17Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "0fb684d91f72899c31cf022b4377607f19248d7224f6544ae1016df768164d73": {
+      "assignment_id": 146389,
+      "author_id": 84323,
+      "created_at": "2026-01-25T21:14:48Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "1531e1692d9f7400cc3fbd8cce09ad29e96335afbfef58554e5796a11f7e4b8d": {
+      "assignment_id": 146389,
+      "author_id": 83559,
+      "created_at": "2026-01-26T01:07:26Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "287320427c07118160052bdb222a051bc65744d5006ecfa1d60559f9b551fee1": {
+      "assignment_id": 146384,
+      "author_id": 85212,
+      "created_at": "2025-11-20T14:01:45Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "43fb8d57cd940f8db10d2ccbb2d20acdfe192dd5299511362d2421f91117579b": {
+      "assignment_id": 146384,
+      "author_id": 85212,
+      "created_at": "2025-11-20T13:58:35Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "495367d3b5ea7d9939afbc5fe56eda945438ed9858e8ddebc105d7da54ed46b0": {
+      "assignment_id": 146405,
+      "author_id": 84543,
+      "created_at": "2025-11-17T13:32:37Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "4a9fd86f86eaa68be0ad2734663fde71313ed7ad28f28e0f3a3c849c8a1bc7d0": {
+      "assignment_id": 146384,
+      "author_id": 77245,
+      "created_at": "2025-11-28T20:17:21Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "4d6b654ec3709705da2466467fe4c76329aa941172b6cde2d21ce8fbac9b6f7e": {
+      "assignment_id": 146392,
+      "author_id": 87249,
+      "created_at": "2025-11-24T17:31:35Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "514255c4f817fef05d2e354450e41fc7735f91b216b73bcd0b9fa42b15835960": {
+      "assignment_id": 146404,
+      "author_id": 84629,
+      "created_at": "2026-02-11T12:56:49Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "5f7a5a09a581a0c18803c4338a6dd66fbdf6a43f8b012d269c7979c8d264ad5d": {
+      "assignment_id": 146387,
+      "author_id": 87413,
+      "created_at": "2026-01-11T21:08:13Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "6a4a429537364d5b5ebdfd14627a33ede9089ee40db4335f33bcdb0d404e53c3": {
+      "assignment_id": 146391,
+      "author_id": 87249,
+      "created_at": "2025-11-17T14:11:21Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "73556d365c49fabd2e47608a39ac7ab9a8a8c348f599e6264548e50fdf901ed4": {
+      "assignment_id": 146387,
+      "author_id": 85505,
+      "created_at": "2026-01-11T17:12:09Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "7edd424176115a0bc8a92cf40eff59a45abdd13f62af2a026fc599d48d8e6152": {
+      "assignment_id": 146389,
+      "author_id": 86487,
+      "created_at": "2026-01-25T00:16:15Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "8020491918150605fb28877b6206562aeef9b977fbd28b3fc070f8b1122fd6a3": {
+      "assignment_id": 146386,
+      "author_id": 86024,
+      "created_at": "2026-01-23T19:08:26Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "82100031ef31ef24fb31d90ed62e1d5f511f09f58ba1dba5a4b8191696141a84": {
+      "assignment_id": 146388,
+      "author_id": 84073,
+      "created_at": "2026-01-25T20:58:45Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "900d49819f0a81542848cc89235ca75f60c976676c9a2d8792e80a8409b439e9": {
+      "assignment_id": 146385,
+      "author_id": 84797,
+      "created_at": "2026-01-08T15:22:06Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "a6ca15fb103dd091f00f5d82e614724a87f913c21c259657623163a33ba09393": {
+      "assignment_id": 146386,
+      "author_id": 84073,
+      "created_at": "2026-01-11T20:04:01Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "b0cba6d83494a7bc3031ca1168d21640e74a94bd2b43d8909de2fde26bcb36a9": {
+      "assignment_id": 146387,
+      "author_id": 67438,
+      "created_at": "2026-01-22T21:27:34Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "c4c3190cffacdc18659acf09512ac36648e5a692625e48df9c35afde53a6cb25": {
+      "assignment_id": 146389,
+      "author_id": 83981,
+      "created_at": "2026-02-06T14:41:01Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "c745da97b18c12991e93c290810189ca5aaaee3a01aadf0e1d4e72b8f8e60a25": {
+      "assignment_id": 150630,
+      "author_id": 86487,
+      "created_at": "2026-02-05T21:46:58Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "ca0f97ab104068a24b96246055fad7748be23600ef294ebb15465642765dee9a": {
+      "assignment_id": 146384,
+      "author_id": 84035,
+      "created_at": "2025-12-09T19:04:00Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "cfb273ab66158e31f13afb468e16961b4b11abfa11c0e3a3919931009cbaff56": {
+      "assignment_id": 146384,
+      "author_id": 85212,
+      "created_at": "2025-11-19T17:00:25Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "d2bc482368ba123f4c790fc84bf362c769e7ed276f881636a04bfd4939688030": {
+      "assignment_id": 146387,
+      "author_id": 83559,
+      "created_at": "2026-01-11T20:07:26Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "d9862b848e2b22de4b773dd484db27de1a39cc4afe5f5dda83737a3bd09c76d5": {
+      "assignment_id": 146387,
+      "author_id": 84124,
+      "created_at": "2026-01-22T12:19:26Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "dc756877b8893c8a12532cc14a70dbc9889782449cc1f1710d31a5d2c5030c35": {
+      "assignment_id": 146387,
+      "author_id": 67438,
+      "created_at": "2026-01-23T20:46:39Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "e34b5dabbfe365b7ded987dde324dd9939845254beea6d5bd9bac84bb7aef1a3": {
+      "assignment_id": 146387,
+      "author_id": 67438,
+      "created_at": "2026-01-23T01:00:40Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "eb77a29e97a222ffd3621a6f3dc2b6cd58266bfaa70562a45b99fc3aba0ccbac": {
+      "assignment_id": 146387,
+      "author_id": 84091,
+      "created_at": "2026-01-12T09:28:35Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "eb7a349397add2ec1baeb074bab663a9d6edef0245d003c2d26e714af4fafbdf": {
+      "assignment_id": 146387,
+      "author_id": 76439,
+      "created_at": "2026-01-22T11:00:39Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    },
+    "fa4f49fdf934e064ac55d07db1b68918dad9b7a7e7e956da9a7b42c9b56631a3": {
+      "assignment_id": 146384,
+      "author_id": 86024,
+      "created_at": "2025-12-09T18:15:29Z",
+      "saved_at": "2026-02-12T23:13:16Z"
+    }
+  },
+  "version": 1
+}
