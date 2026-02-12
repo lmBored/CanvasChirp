@@ -73,9 +73,23 @@ def main():
 
         group = get_group()
         ass = course.get_assignments()
+
+        out_stream = sys.stdout
+        choice_dest = input("\nOutput to (T)erminal or (F)ile? [T/F]: ").strip().lower()
+        if choice_dest == 'f':
+            fname = input(f"Enter filename (if none provided, defaults to course_{course.id}_output.txt): ").strip()
+            if not fname:
+                fname = f"course_{course.id}_output.txt"
+            choice_mode = input("(O)verwrite or (A)ppend? [O/A]: ").strip().lower()
+            mode = 'a' if choice_mode == 'a' else 'w'
+            print(f"Opening '{fname}' for {'appending' if mode == 'a' else 'writing'}...")
+            out_stream = open(fname, mode, encoding="utf-8")
+        
         for a in ass:
-            print("======================================================================")
-            print(f"Assignment: {a.name}")
+            if out_stream != sys.stdout:
+                print(f"Processing: {a.name}", file=sys.stdout)
+            print("======================================================================", file=out_stream)
+            print(f"Assignment: {a.name}", file=out_stream)
             sub = a.get_submissions(include=["submission_comments", "user"])
             count = 0
             for s in sub:
@@ -90,19 +104,21 @@ def main():
                         if str(aid) not in group: # O(1)
                             continue
 
-                        print("----------------------------------")
-                        print(f"Student: {student_name}, ID: {s.user_id}, Group: {group_name}")
+                        print("----------------------------------", file=out_stream)
+                        print(f"Student: {student_name}, ID: {s.user_id}, Group: {group_name}", file=out_stream)
                         author_name = c.get("author_name")
                         comment = c.get("comment")
                         created_at = c.get("created_at")
-                        print(f"{created_at} - {author_name}:")
-                        print(f"{comment}")
+                        print(f"{created_at} - {author_name}:", file=out_stream)
+                        print(f"{comment}", file=out_stream)
                     count += 1
             if count == 0:
-                print("\nNo submission comments.")
+                print("\nNo submission comments.", file=out_stream)
             else:
-                print(f"\n{count} comments\n")
-
+                print(f"\n{count} comments\n", file=out_stream)
+        if out_stream is not sys.stdout:
+            print("Done.")
+            out_stream.close()
     except Exception as e:
         print(e)
         sys.exit(1)
