@@ -22,7 +22,7 @@ jobs:
       TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
       FIRST_RUN_BEHAVIOR: baseline
       STATE_FILE: state/course_comment_dedupe.json
-      STATE_BRANCH: canvas-notifier-state
+      STATE_BRANCH: default
 
     steps:
       - name: Checkout source branch

@@ -96,10 +96,4 @@ Workflow file: `.github/workflows/course-comments-to-teams.yml`
 	- `CANVAS_API_BASE` (defaults to `https://canvas.tue.nl` if unset)
 4. Create and push the state branch once:
 
-```bash
-git switch -c canvas-notifier-state
-git push -u origin canvas-notifier-state
-git switch -
-```
-
-The workflow runs daily and on manual dispatch, then commits only the de-dup state file to `canvas-notifier-state` with `[skip ci]`.
+The workflow runs daily and on manual dispatch, then commits only the de-dup state file to state/ with `[skip ci]`.
