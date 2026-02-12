@@ -1,0 +1,105 @@
+name: Canvas Course Comments to Teams
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "13 6 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: canvas-course-comments-to-teams
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    env:
+      CANVAS_API_BASE: ${{ vars.CANVAS_API_BASE }}
+      CANVAS_COURSE_ID: ${{ vars.CANVAS_COURSE_ID }}
+      CANVAS_TOKEN: ${{ secrets.CANVAS_TOKEN }}
+      TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+      FIRST_RUN_BEHAVIOR: baseline
+      STATE_FILE: state/course_comment_dedupe.json
+      STATE_BRANCH: canvas-notifier-state
+
+    steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Prepare state worktree
+        run: |
+          git fetch origin "${STATE_BRANCH}:${STATE_BRANCH}" || true
+
+          if git show-ref --verify --quiet "refs/heads/${STATE_BRANCH}"; then
+            git worktree add .state-worktree "${STATE_BRANCH}"
+          else
+            git worktree add -b "${STATE_BRANCH}" .state-worktree
+          fi
+
+          mkdir -p "$(dirname "${STATE_FILE}")"
+          if [ -f ".state-worktree/${STATE_FILE}" ]; then
+            cp ".state-worktree/${STATE_FILE}" "${STATE_FILE}"
+          fi
+
+      - name: Run notifier
+        run: uv run notify_course_comments.py
+
+      - name: Commit state update
+        run: |
+          mkdir -p ".state-worktree/$(dirname "${STATE_FILE}")"
+
+          if [ -f "${STATE_FILE}" ]; then
+            cp "${STATE_FILE}" ".state-worktree/${STATE_FILE}"
+          fi
+
+          if [ ! -f ".state-worktree/${STATE_FILE}" ]; then
+            echo "No state file present. Nothing to commit."
+            exit 0
+          fi
+
+          cd .state-worktree
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -- "${STATE_FILE}"
+          if git diff --cached --quiet -- "${STATE_FILE}"; then
+            echo "No state changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore(state): update course comment dedupe [skip ci]"
+
+          pushed=0
+          for attempt in 1 2 3; do
+            if git push origin "HEAD:${STATE_BRANCH}"; then
+              pushed=1
+              break
+            fi
+
+            if git ls-remote --exit-code --heads origin "${STATE_BRANCH}" >/dev/null 2>&1; then
+              git fetch origin "${STATE_BRANCH}"
+              git rebase "origin/${STATE_BRANCH}"
+            fi
+
+            sleep 2
+          done
+
+          if [ "${pushed}" -ne 1 ]; then
+            echo "Failed to push state updates after retries."
+            exit 1
+          fi
