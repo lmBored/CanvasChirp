@@ -80,6 +80,35 @@ class TestNotifyCourseComments(unittest.TestCase):
         self.assertIn("Student A", text)
         self.assertIn("Please check section 3.", text)
 
+    def test_resolve_webhook_mode_auto_detects_power_automate(self):
+        url = (
+            "https://defaultcc7df24760ce4a0f9d75704cf60efc.64.environment.api.powerplatform.com/"
+            "powerautomate/automations/direct/workflows/abc/triggers/manual/paths/invoke"
+        )
+        self.assertEqual(notifier.resolve_teams_webhook_mode(url, "auto"), "adaptivecard")
+
+    def test_resolve_webhook_mode_auto_detects_messagecard(self):
+        url = "https://outlook.office.com/webhook/abc/IncomingWebhook/def/ghi"
+        self.assertEqual(notifier.resolve_teams_webhook_mode(url, "auto"), "messagecard")
+
+    def test_build_teams_payload_adaptivecard_shape(self):
+        payload = notifier.build_teams_payload(
+            "https://default.environment.api.powerplatform.com/powerautomate/automations/direct/workflows/abc/triggers/manual/paths/invoke",
+            "hello",
+            "adaptivecard",
+        )
+        self.assertEqual(payload.get("type"), "AdaptiveCard")
+        self.assertIn("body", payload)
+
+    def test_build_teams_payload_messagecard_shape(self):
+        payload = notifier.build_teams_payload(
+            "https://outlook.office.com/webhook/abc/IncomingWebhook/def/ghi",
+            "hello",
+            "messagecard",
+        )
+        self.assertEqual(payload.get("@type"), "MessageCard")
+        self.assertIn("text", payload)
+
     def test_state_round_trip(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             state_path = Path(temp_dir) / "state.json"
@@ -103,6 +132,15 @@ class TestNotifyCourseComments(unittest.TestCase):
             loaded_state, exists_after = notifier.load_state(str(state_path))
             self.assertTrue(exists_after)
             self.assertIn("k1", loaded_state.get("seen", {}))
+
+    def test_load_state_empty_file_is_treated_as_missing(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            state_path = Path(temp_dir) / "empty_state.json"
+            state_path.write_text("", encoding="utf-8")
+
+            loaded_state, exists = notifier.load_state(str(state_path))
+            self.assertFalse(exists)
+            self.assertEqual(loaded_state.get("seen"), {})
 
 
 if __name__ == "__main__":

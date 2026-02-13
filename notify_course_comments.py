@@ -7,6 +7,7 @@ import sys
 import time
 from urllib import error as url_error
 from urllib import request as url_request
+from urllib.parse import urlparse
 
 sys.stdout.reconfigure(line_buffering=True)
 
@@ -47,6 +48,9 @@ def load_groups(groups_file: str) -> dict[str, str]:
 def load_state(state_file: str) -> tuple[dict, bool]:
     path = Path(state_file)
     if not path.exists():
+        return {"version": 1, "seen": {}}, False
+
+    if path.stat().st_size == 0:
         return {"version": 1, "seen": {}}, False
 
     with path.open("r", encoding="utf-8") as file:
@@ -123,13 +127,90 @@ def build_teams_text(event: dict) -> str:
     return "\n".join(lines)
 
 
-def post_to_teams(webhook_url: str, text: str, timeout_seconds: int = 20, max_retries: int = 3) -> bool:
-    payload = {
+def resolve_teams_webhook_mode(webhook_url: str, mode_override: str | None = None) -> str:
+    mode = (mode_override or "auto").strip().lower()
+    aliases = {
+        "adaptive": "adaptivecard",
+        "adaptive_card": "adaptivecard",
+        "power_automate": "adaptivecard",
+        "message_card": "messagecard",
+    }
+    mode = aliases.get(mode, mode)
+
+    if mode in {"adaptivecard", "messagecard"}:
+        return mode
+    if mode not in {"", "auto"}:
+        print(f"Unknown TEAMS_WEBHOOK_MODE='{mode_override}', using auto mode.")
+
+    parsed = urlparse(webhook_url)
+    host = parsed.netloc.lower()
+    path = parsed.path.lower()
+
+    is_power_automate = (
+        "powerplatform.com" in host
+        or "logic.azure.com" in host
+        or ("/workflows/" in path and "/triggers/manual/" in path)
+    )
+    if is_power_automate:
+        return "adaptivecard"
+
+    is_messagecard_webhook = (
+        "webhook.office.com" in host
+        or "outlook.office.com" in host
+        or "/incomingwebhook/" in path
+        or "/webhookb2/" in path
+    )
+    if is_messagecard_webhook:
+        return "messagecard"
+
+    return "messagecard"
+
+
+def build_messagecard_payload(text: str) -> dict:
+    return {
         "@type": "MessageCard",
         "@context": "https://schema.org/extensions",
         "summary": "Canvas student comment",
         "text": text,
     }
+
+
+def build_adaptive_card_payload(text: str) -> dict:
+    return {
+        "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+        "type": "AdaptiveCard",
+        "version": "1.4",
+        "body": [
+            {
+                "type": "TextBlock",
+                "text": "New Canvas student comment",
+                "weight": "Bolder",
+                "size": "Medium",
+            },
+            {
+                "type": "TextBlock",
+                "text": text,
+                "wrap": True,
+            },
+        ],
+    }
+
+
+def build_teams_payload(webhook_url: str, text: str, payload_mode: str | None = None) -> dict:
+    mode = resolve_teams_webhook_mode(webhook_url, payload_mode)
+    if mode == "adaptivecard":
+        return build_adaptive_card_payload(text)
+    return build_messagecard_payload(text)
+
+
+def post_to_teams(
+    webhook_url: str,
+    text: str,
+    timeout_seconds: int = 20,
+    max_retries: int = 3,
+    payload_mode: str | None = None,
+) -> bool:
+    payload = build_teams_payload(webhook_url, text, payload_mode)
     request = url_request.Request(
         webhook_url,
         data=json.dumps(payload).encode("utf-8"),
@@ -214,6 +295,7 @@ def main() -> None:
     state_file = os.getenv("STATE_FILE", DEFAULT_STATE_FILE)
     first_run_behavior = os.getenv("FIRST_RUN_BEHAVIOR", "baseline").strip().lower()
     dry_run = is_truthy(os.getenv("DRY_RUN"))
+    webhook_mode = os.getenv("TEAMS_WEBHOOK_MODE", "auto").strip().lower()
 
     token = get_canvas_token()
     group_map = load_groups(groups_file)
@@ -225,6 +307,7 @@ def main() -> None:
     course = canvas.get_course(course_id)
     print(f"Canvas user: {current_user.name} ({current_user.id})")
     print(f"Course: {course.name} ({course.id})")
+    print(f"Webhook payload mode: {resolve_teams_webhook_mode(webhook_url, webhook_mode)}")
 
     candidates = collect_candidate_events(course, group_map)
     unseen = []
@@ -238,6 +321,12 @@ def main() -> None:
         event["key"] = key
         if key not in seen:
             unseen.append(event)
+
+    already_seen_count = len(candidates) - len(unseen)
+    print(
+        f"Student comment candidates: {len(candidates)} | "
+        f"New: {len(unseen)} | Already seen: {already_seen_count}"
+    )
 
     if dry_run:
         print(f"DRY_RUN enabled. {len(unseen)} comments would be sent to Teams.")
@@ -265,7 +354,7 @@ def main() -> None:
     sent = 0
     for event in unseen:
         text = build_teams_text(event)
-        success = post_to_teams(webhook_url, text)
+        success = post_to_teams(webhook_url, text, payload_mode=webhook_mode)
         if not success:
             continue
 

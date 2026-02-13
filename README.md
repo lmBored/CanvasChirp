@@ -67,6 +67,7 @@ export STUDENT_GROUPS_FILE="student_groups.json"               # default: studen
 export STATE_FILE="state/course_comment_dedupe.json"           # default: state/course_comment_dedupe.json
 export FIRST_RUN_BEHAVIOR="baseline"                           # baseline | notify
 export DRY_RUN="false"                                         # true|false (no Teams post, no state writes)
+export TEAMS_WEBHOOK_MODE="auto"                               # auto | adaptivecard | messagecard
 ```
 
 Run:
@@ -92,8 +93,17 @@ Workflow file: `.github/workflows/course-comments-to-teams.yml`
 	- `TEAMS_WEBHOOK_URL`
 2. Add repository variable:
 	- `CANVAS_COURSE_ID`
-3. Optional repository variable:
+3. Optional repository variables:
 	- `CANVAS_API_BASE` (defaults to `https://canvas.tue.nl` if unset)
-4. Create and push the state branch once:
+ 	- `FIRST_RUN_BEHAVIOR` (`baseline` or `notify`, defaults to `baseline`)
+ 	- `STATE_BRANCH` (defaults to `default` if you keep workflow as-is)
 
-The workflow runs daily and on manual dispatch, then commits only the de-dup state file to state/ with `[skip ci]`.
+4. Ensure the state branch exists (only needed if you use a non-default branch for state):
+
+```bash
+git switch -c default
+git push -u origin default
+git switch -
+```
+
+The workflow runs daily and on manual dispatch, then commits only the de-dup state file (`state/course_comment_dedupe.json`) with `[skip ci]`.

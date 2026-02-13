@@ -20,7 +20,7 @@ jobs:
       CANVAS_COURSE_ID: ${{ vars.CANVAS_COURSE_ID }}
       CANVAS_TOKEN: ${{ secrets.CANVAS_TOKEN }}
       TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
-      FIRST_RUN_BEHAVIOR: baseline
+      FIRST_RUN_BEHAVIOR: ${{ vars.FIRST_RUN_BEHAVIOR || 'baseline' }}
       STATE_FILE: state/course_comment_dedupe.json
       STATE_BRANCH: default
 
